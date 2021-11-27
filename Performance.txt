@@ -1,0 +1,1 @@
+Zeigt die Auslastung des Systems an.
