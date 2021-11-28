@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,9 +21,21 @@ namespace Performance
     /// </summary>
     public partial class MainWindow : Window
     {
+        Thread newThread;
+
+        ProcessTimer w;
+
         public MainWindow()
         {
             InitializeComponent();
+            w = new ProcessTimer();
+
+            StartThread();
+        }
+        private void StartThread()
+        {
+            newThread = new Thread(w.DoWork);
+            newThread.Start();
         }
     }
 }
