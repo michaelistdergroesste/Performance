@@ -37,6 +37,10 @@ namespace Performance
 
         
         
+        /// <summary>
+        /// Starten des Auslesens der Daten
+        /// </summary>
+        /// <param name="obj"></param>
         internal void DoWork(object obj)
         {
             while (true)
