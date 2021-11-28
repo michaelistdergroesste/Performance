@@ -35,12 +35,14 @@ namespace Performance
             //    cpuCounter.InstanceName = "_Total"; // "_Total" entspricht der gesamten CPU Auslastung, Bei Computern mit mehr als 1 logischem Prozessor: "0" dem ersten Core, "1" dem zweiten...
         }
 
+        
+        
         internal void DoWork(object obj)
         {
             while (true)
             {
                 GetCPUusage();
-                Thread.Sleep(1000);
+                Thread.Sleep(1000); // alle 1 Sekunde.
             }
         }
 
