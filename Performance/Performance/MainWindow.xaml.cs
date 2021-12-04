@@ -34,6 +34,7 @@ namespace Performance
         }
         private void StartThread()
         {
+            
             newThread = new Thread(w.DoWork);
             newThread.Start();
         }
