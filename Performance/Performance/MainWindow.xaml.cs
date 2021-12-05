@@ -25,8 +25,13 @@ namespace Performance
 
         ProcessTimer w;
 
+        private MainWindowModel viewModel;
+
         public MainWindow()
         {
+            viewModel = new MainWindowModel();
+            DataContext = viewModel;
+
             InitializeComponent();
             w = new ProcessTimer();
 

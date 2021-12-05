@@ -16,6 +16,10 @@ namespace Performance
         PerformanceCounter pRam;
         PerformanceCounter pCpu;
 
+        List<Measurement> measurements = new List<Measurement>();
+
+        Queue<Measurement> qMeasurement = new Queue<Measurement>(10);
+
         public ProcessTimer()
         {
             //pCpu = new PerformanceCounter("Processor", "% Processor Time", "_Total");
@@ -45,17 +49,27 @@ namespace Performance
         {
             while (true)
             {
-                GetCPUusage();
                 Thread.Sleep(1000); // alle 1 Sekunde.
+                GetCPUusage();
+                
             }
         }
 
-        float GetCPUusage() // Liefert die aktuelle Auslastung zurück
+        void GetCPUusage() // Liefert die aktuelle Auslastung zurück
         {
             float retVal1 = pCpu.NextValue();
+            Measurement cpu = new Measurement();
+            cpu.Value = (int)(retVal1 * 100.0F);
+            cpu.DateTime = DateTime.Now;
+            cpu.DetectorId = 0;
+            measurements.Add(cpu);
             float retVal2 = pRam.NextValue();
+            Measurement ram = new Measurement();
+            ram.Value = (int)(retVal2 * 100.0F);
+            ram.DateTime = DateTime.Now;
+            ram.DetectorId = 0;
+            measurements.Add(ram);
 
-            return retVal1;
         }
 
     }
