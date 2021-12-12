@@ -25,7 +25,7 @@ namespace Performance
         {
             PlotModel = new PlotModel();
             SetUpModel();
-            //LoadData();
+            LoadData();
         }
 
         private readonly List<OxyColor> colors = new List<OxyColor>
@@ -63,33 +63,42 @@ namespace Performance
 
         }
 
-        private void LoadData(Queue<Measurement> qMeasurement)
+
+
+        private void LoadData(/*Queue<Measurement> qMeasurement*/)
         {
             List<Measurement> measurements = new List<Measurement>();
-            //foreach (Measurement measurement in qMeasurement) 
-            //    Console.Write(c + " ");
-
-            //List<Measurement> measurements = Data.GetData();
-
-            //var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
+            
+            var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
 
             //foreach (var data in dataPerDetector)
-            //{
-            //    var lineSerie = new LineSeries
-            //    {
-            //        StrokeThickness = 2,
-            //        MarkerSize = 3,
-            //        MarkerStroke = colors[data.Key],
-            //        MarkerType = markerTypes[data.Key],
-            //        CanTrackerInterpolatePoints = false,
-            //        Title = string.Format("Detector {0}", data.Key),
-            //        Smooth = false,
-            //    };
+            {
+                var lineSerie = new LineSeries
+                {
+                    StrokeThickness = 2,
+                    MarkerSize = 3,
+                    MarkerStroke = OxyColors.Green,  //colors[data.Key],
+                    MarkerType = MarkerType.Plus,
+                    CanTrackerInterpolatePoints = false,
+                    Title = string.Format("Detector {0}", 0),
+                    Smooth = false,
+                };
+                Measurement[] measure = new Measurement[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    measure[i] = new Measurement();
+                    measure[i].DateTime = new DateTime(2008, 5, 1, 8, 30, 5 + i);
+                    measure[i].DetectorId = 0;
+                    measure[i].Value = i * 2;
+                    DataPoint dataPoint = new DataPoint(DateTimeAxis.ToDouble(measure[i].DateTime), measure[i].Value);
+                    lineSerie.Points.Add(dataPoint);
 
-            //    data.ToList().ForEach(d => lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value)));
-            //    PlotModel.Series.Add(lineSerie);
-            //}
-            //lastUpdate = DateTime.Now;
+
+                }
+                
+                PlotModel.Series.Add(lineSerie);
+            }
+            lastUpdate = DateTime.Now;
         }
 
         public void UpdateModel()
