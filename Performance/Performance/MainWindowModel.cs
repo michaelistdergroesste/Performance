@@ -65,7 +65,7 @@ namespace Performance
 
         private void LoadData(Queue<Measurement> qMeasurement)
         {
-            //List<Measurement> measurements = new List<Measurement>();
+            List<Measurement> measurements = new List<Measurement>();
             //foreach (Measurement measurement in qMeasurement) 
             //    Console.Write(c + " ");
 
