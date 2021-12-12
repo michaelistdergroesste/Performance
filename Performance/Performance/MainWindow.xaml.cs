@@ -27,6 +27,8 @@ namespace Performance
 
         private MainWindowModel viewModel;
 
+        Queue<Measurement> qMeasurement = new Queue<Measurement>();
+
         public MainWindow()
         {
             viewModel = new MainWindowModel();
@@ -39,9 +41,15 @@ namespace Performance
         }
         private void StartThread()
         {
-            
-            newThread = new Thread(w.DoWork);
+
+            //newThread = new Thread(w.DoWork);
+            newThread = new Thread(() => w.DoWork(qMeasurement));
             newThread.Start();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ;
         }
     }
 }
