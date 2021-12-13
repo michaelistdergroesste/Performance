@@ -37,15 +37,6 @@ namespace Performance
             OxyColors.Azure
         };
 
-        private readonly List<MarkerType> markerTypes = new List<MarkerType>
-        {
-            MarkerType.Plus,
-            MarkerType.Star,
-            MarkerType.Diamond,
-            MarkerType.Triangle,
-            MarkerType.Cross
-        };
-
 
         private void SetUpModel()
         {
@@ -56,9 +47,14 @@ namespace Performance
             PlotModel.LegendBackground = OxyColor.FromAColor(200, OxyColors.White);
             PlotModel.LegendBorder = OxyColors.Black;
 
-            var dateAxis = new DateTimeAxis(AxisPosition.Bottom, "Date", "HH:mm") { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, IntervalLength = 80 };
+            var dateAxis = new DateTimeAxis(AxisPosition.Bottom, "Date", "HH:mm");
+            dateAxis.MajorGridlineStyle = LineStyle.Solid;
+            dateAxis.MinorGridlineStyle = LineStyle.Dot;
+            dateAxis.IntervalLength = 80;
             PlotModel.Axes.Add(dateAxis);
-            var valueAxis = new LinearAxis(AxisPosition.Left, 0) { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "Value" };
+
+            var valueAxis = new LinearAxis(AxisPosition.Left, 0) 
+            { MajorGridlineStyle = LineStyle.Solid, MinorGridlineStyle = LineStyle.Dot, Title = "Value" };
             PlotModel.Axes.Add(valueAxis);
 
         }
@@ -71,13 +67,13 @@ namespace Performance
             
             var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
 
-            //foreach (var data in dataPerDetector)
-            {
+            for (int j = 0; j < 3; j++)
+            {                
                 var lineSerie = new LineSeries
                 {
                     StrokeThickness = 2,
-                    MarkerSize = 3,
-                    MarkerStroke = OxyColors.Green,  //colors[data.Key],
+                    MarkerSize = 3,                    
+                    MarkerStroke = OxyColors.Red,  //colors[data.Key],
                     MarkerType = MarkerType.Plus,
                     CanTrackerInterpolatePoints = false,
                     Title = string.Format("Detector {0}", 0),
@@ -88,12 +84,10 @@ namespace Performance
                 {
                     measure[i] = new Measurement();
                     measure[i].DateTime = new DateTime(2008, 5, 1, 8, 30, 5 + i);
-                    measure[i].DetectorId = 0;
-                    measure[i].Value = i * 2;
+                    measure[i].DetectorId = j;
+                    measure[i].Value = i * 2 + j;
                     DataPoint dataPoint = new DataPoint(DateTimeAxis.ToDouble(measure[i].DateTime), measure[i].Value);
                     lineSerie.Points.Add(dataPoint);
-
-
                 }
                 
                 PlotModel.Series.Add(lineSerie);

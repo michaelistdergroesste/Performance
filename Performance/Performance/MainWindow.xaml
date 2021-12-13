@@ -8,8 +8,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <oxy:Plot x:Name="Plot1" Title="A Graph" Model="{Binding PlotModel}" Margin="10" Grid.Row="1">
-        </oxy:Plot>
         <Button Content="Button" HorizontalAlignment="Left" Margin="50,339,0,0" VerticalAlignment="Top" Height="54" Width="90" Click="Button_Click"/>
+        <Grid Margin="50,50,50,50" Background="#FFC4B9FF">
+            <oxy:Plot x:Name="Plot1" Title="A Graph" Model="{Binding PlotModel}" Margin="10" Grid.Row="1">
+            </oxy:Plot>
+        </Grid>
     </Grid>
+
 </Window>
