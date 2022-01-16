@@ -57,7 +57,7 @@ namespace Performance
             //qMeasurement = new Queue<Measurement>();
             while (true)
             {
-                Thread.Sleep(1000); // alle 1 Sekunde.
+                Thread.Sleep(500); // alle 1 Sekunde.
                 GetCPUusage();
                 
             }

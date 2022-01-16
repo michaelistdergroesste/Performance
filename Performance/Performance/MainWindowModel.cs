@@ -16,16 +16,42 @@ namespace Performance
         public PlotModel PlotModel
         {
             get { return plotModel; }
-            set { plotModel = value; OnPropertyChanged("PlotModel"); }
+            set 
+            { 
+                plotModel = value; 
+                OnPropertyChanged("PlotModel"); 
+            }
         }
 
         private DateTime lastUpdate = DateTime.Now;
+
+        LineSeries[] lineSerie = new LineSeries[3];
 
         public MainWindowModel()
         {
             PlotModel = new PlotModel();
             SetUpModel();
             LoadData();
+            if (lineSerie[0] == null)
+                InitLineSeries();
+
+        }
+
+        private void InitLineSeries()
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                lineSerie[j] = new LineSeries
+                {
+                    StrokeThickness = 2,
+                    MarkerSize = 3,
+                    MarkerStroke = OxyColors.Red,  //colors[data.Key],
+                    MarkerType = MarkerType.Plus,
+                    CanTrackerInterpolatePoints = false,
+                    Title = string.Format("Detector {0}", 0),
+                    Smooth = false,
+                };
+            }
         }
 
         private readonly List<OxyColor> colors = new List<OxyColor>
@@ -37,6 +63,8 @@ namespace Performance
             OxyColors.Azure
         };
 
+
+        Measurement[] measure = new Measurement[100];
 
         private void SetUpModel()
         {
@@ -63,55 +91,82 @@ namespace Performance
 
         private void LoadData(/*Queue<Measurement> qMeasurement*/)
         {
-            List<Measurement> measurements = new List<Measurement>();
-            
-            var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
+            //List<Measurement> measurements = new List<Measurement>();
 
+            //var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
+
+            LoadModel();
+            //UpdateModel();
+        }
+
+        public void LoadModel()
+        {
             for (int j = 0; j < 3; j++)
-            {                
-                var lineSerie = new LineSeries
-                {
-                    StrokeThickness = 2,
-                    MarkerSize = 3,                    
-                    MarkerStroke = OxyColors.Red,  //colors[data.Key],
-                    MarkerType = MarkerType.Plus,
-                    CanTrackerInterpolatePoints = false,
-                    Title = string.Format("Detector {0}", 0),
-                    Smooth = false,
-                };
-                Measurement[] measure = new Measurement[5];
+            {
+
+                if (lineSerie[0] == null)
+                    InitLineSeries();
+
                 for (int i = 0; i < 5; i++)
                 {
                     measure[i] = new Measurement();
-                    measure[i].DateTime = new DateTime(2008, 5, 1, 8, 30, 5 + i);
+                    //measure[i].DateTime = new DateTime(2008, 5, 1, 8, 30, 5 + i);
+                    measure[i].DateTime = DateTime.Now;
                     measure[i].DetectorId = j;
                     measure[i].Value = i * 2 + j;
                     DataPoint dataPoint = new DataPoint(DateTimeAxis.ToDouble(measure[i].DateTime), measure[i].Value);
-                    lineSerie.Points.Add(dataPoint);
+                    lineSerie[j].Points.Add(dataPoint);
                 }
-                
-                PlotModel.Series.Add(lineSerie);
+
+                PlotModel.Series.Add(lineSerie[j]);
             }
+
             lastUpdate = DateTime.Now;
+
+            //OnPropertyChanged("PlotModel");
         }
 
         public void UpdateModel()
         {
-            //List<Measurement> measurements = Data.GetUpdateData(lastUpdate);
-            //var dataPerDetector = measurements.GroupBy(m => m.DetectorId).OrderBy(m => m.Key).ToList();
+            for (int j = 0; j < 3; j++)
+            {
 
-            //foreach (var data in dataPerDetector)
-            //{
-            //    var lineSerie = PlotModel.Series[data.Key] as LineSeries;
-            //    if (lineSerie != null)
-            //    {
-            //        data.ToList()
-            //            .ForEach(d => lineSerie.Points.Add(new DataPoint(DateTimeAxis.ToDouble(d.DateTime), d.Value)));
-            //    }
-            //}
-            //lastUpdate = DateTime.Now;
-            // Probier
+                for (int i = 0; i < 20; i++)
+                {
+                    measure[i] = new Measurement();
+                    measure[i].DateTime = new DateTime(2008, 5, 1, 8, 30, 15 + i);
+                    measure[i].DetectorId = j;
+                    measure[i].Value = i * 30 + j;
+                    DataPoint dataPoint = new DataPoint(DateTimeAxis.ToDouble(measure[i].DateTime), measure[i].Value);
+                    lineSerie[j].Points.Add(dataPoint);
+                }
+
+                //PlotModel.Series.Add(lineSerie[j]);
+            }
+            lastUpdate = DateTime.Now;
+
+            OnPropertyChanged("PlotModel");
+
         }
+
+        private List<Measurement> GetData(int date)
+        {
+
+            List < Measurement > retVal = new List<Measurement> ();
+            for (int j = 0; j < 3; j++)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    Measurement measure = new Measurement();
+                    measure.DateTime = new DateTime(2008, 5, 1, 8, 30, 15 + i);
+                    measure.DetectorId = j;
+                    measure.Value = i * 30 + j;
+                    retVal.Add(measure);
+                }
+            }
+            return retVal;
+        }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

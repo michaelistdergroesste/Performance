@@ -25,13 +25,13 @@ namespace Performance
 
         ProcessTimer w;
 
-        private MainWindowModel viewModel;
+        private MainWindowModel viewModel = new MainWindowModel();
 
         Queue<Measurement> qMeasurement = new Queue<Measurement>();
 
         public MainWindow()
         {
-            viewModel = new MainWindowModel();
+            
             DataContext = viewModel;
 
             InitializeComponent();
@@ -49,7 +49,12 @@ namespace Performance
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ;
+            viewModel.UpdateModel();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            viewModel.LoadModel();
         }
     }
 }
